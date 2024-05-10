@@ -2,16 +2,17 @@
 import { useEffect, useState, useRef } from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Camera } from 'expo-camera'
+import { CameraView, Camera } from 'expo-camera'
 import { Video } from 'expo-av'
 import { shareAsync } from 'expo-sharing'
 import * as MediaLibrary from 'expo-media-library'
 
 import VideoPlayer from './src/components/VideoPlayer';
-import CameraView from './src/components/CameraView';
+import CameraComponent from './src/components/CameraView';
+import { CameraViewProps } from './src/components/CameraView/props';
 
 export default function App() {
-  const cameraRef = useRef<Camera>(null)
+  const cameraRef = useRef<CameraView>(null)
   const [isRecording, setIsRecording] = useState(false)
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false)
@@ -38,7 +39,7 @@ export default function App() {
   }
 
   return (
-    <CameraView
+    <CameraComponent
     cameraRef={cameraRef}
     isRecording ={isRecording}
     onRecord={recordVideo}

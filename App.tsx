@@ -7,7 +7,13 @@ import { Video } from 'expo-av'
 import { shareAsync } from 'expo-sharing'
 import * as MediaLibrary from 'expo-media-library'
 
+import VideoPlayer from './src/components/VideoPlayer';
+import CameraView from './src/components/CameraView';
+
 export default function App() {
+  const cameraRef = useRef<Camera>(null)
+  const [isRecording, setIsRecording] = useState(false)
+
   const [hasCameraPermission, setHasCameraPermission] = useState(false)
   const [hasMicrophonePermission, setHasMicrophonePermission] = useState(false)
   const [hasMediaPermission, setHasMediaPermission] = useState(false)
@@ -32,9 +38,11 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
+    <CameraView
+    cameraRef={cameraRef}
+    isRecording ={isRecording}
+    onRecord={recordVideo}
+    onStopRecording={stopRecording}/>
   );
 }
 

@@ -8,6 +8,13 @@ import { shareAsync } from 'expo-sharing'
 import * as MediaLibrary from 'expo-media-library'
 
 export default function App() {
+  useEffect(() => {
+    (async () => {
+      const cameraPermission = await Camera.requestCameraPermissionsAsync()
+      const microphonePermission = await Camera.requestMicrophonePermissionsAsync()
+      const MediaLibraryPermission = await MediaLibrary.requestPermissionsAsync()
+    })()
+  }, [])
   return (
     <View style={styles.container}>
       <Text>Open up App.tsx to start working on your app!</Text>

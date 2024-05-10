@@ -11,10 +11,12 @@ export default function CameraComponent({
     onStopRecording
 }: CameraViewProps){
     return(
-        <CameraView>
-            <View>
-                <TouchableOpacity>
-                    <Text>Record Video</Text>
+        <CameraView style={styles.container}ref={cameraRef}>
+            <View style = {styles.buttonContainer}>
+                <TouchableOpacity style={styles.buttonRecord} onPress={isRecording ? onStopRecording : onRecord}>
+                    <Text style={styles.buttonText}>
+                        {isRecording ? "Stop Recording" : "Start Record"}
+                    </Text>
                 </TouchableOpacity>
             </View>
         </CameraView>

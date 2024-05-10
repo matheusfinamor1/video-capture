@@ -1,3 +1,4 @@
+import React from "react";
 import { Text, TouchableOpacity, View } from 'react-native'
 
 import { CameraViewProps } from './props'
@@ -11,7 +12,7 @@ export default function CameraComponent({
     onStopRecording
 }: CameraViewProps){
     return(
-        <CameraView style={styles.container}ref={cameraRef}>
+        <CameraView style={styles.container} ref={cameraRef}>
             <View style = {styles.buttonContainer}>
                 <TouchableOpacity style={styles.buttonRecord} onPress={isRecording ? onStopRecording : onRecord}>
                     <Text style={styles.buttonText}>

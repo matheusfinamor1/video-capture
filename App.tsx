@@ -2,14 +2,12 @@
 import { useEffect, useState, useRef } from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 
-import { CameraView, Camera, CameraRecordingOptions, VideoQuality } from 'expo-camera'
-import { Video } from 'expo-av'
+import { CameraView, Camera, CameraRecordingOptions } from 'expo-camera'
 import { shareAsync } from 'expo-sharing'
 import * as MediaLibrary from 'expo-media-library'
 
 import VideoPlayer from './src/components/VideoPlayer';
-import CameraComponent from './src/components/CameraView';
-import { CameraViewProps } from './src/components/CameraView/props';
+import CameraComponent from './src/components/CameraComponent'
 
 export default function App() {
   const cameraRef = useRef<CameraView>(null)
@@ -41,6 +39,7 @@ export default function App() {
 
   const recordVideo = () =>{
     setIsRecording(true)
+
     const options : CameraRecordingOptions = {
       maxDuration: 60
     }
@@ -50,8 +49,10 @@ export default function App() {
           setVideo(recordedVideo)
           setIsRecording(false)
       })
+    }else {
+      console.error("Referência da câmera não disponível para gravação");
+      
     }
-    
   }
 
   const stopRecording = () => {
@@ -63,10 +64,17 @@ export default function App() {
 
   if(video){
     const shareVideo = () => {
-
+      shareAsync(video.uri).then(() => {
+        setVideo(undefined)
+      })
     }
     const saveVideo = () => {
-      
+      MediaLibrary.saveToLibraryAsync(video.uri).then(()=> {
+        setVideo(undefined)
+      })
+    }
+    const discardVideo = () => {
+      setVideo(undefined)
     }
 
       return (
@@ -74,7 +82,7 @@ export default function App() {
           video={video}
           onShare={shareVideo}
           onSave={saveVideo}
-          onDiscard={()=> setVideo(undefined)}
+          onDiscard={discardVideo}
         />
       )
   }
@@ -87,12 +95,3 @@ export default function App() {
     onStopRecording={stopRecording}/>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

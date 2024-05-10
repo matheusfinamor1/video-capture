@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { StyleSheet, Text, View } from 'react-native';
 
-import { CameraView, Camera } from 'expo-camera'
+import { CameraView, Camera, CameraRecordingOptions, VideoQuality } from 'expo-camera'
 import { Video } from 'expo-av'
 import { shareAsync } from 'expo-sharing'
 import * as MediaLibrary from 'expo-media-library'
@@ -14,6 +14,7 @@ import { CameraViewProps } from './src/components/CameraView/props';
 export default function App() {
   const cameraRef = useRef<CameraView>(null)
   const [isRecording, setIsRecording] = useState(false)
+  const [video, setVideo] = useState<any>()
 
   const [hasCameraPermission, setHasCameraPermission] = useState(false)
   const [hasMicrophonePermission, setHasMicrophonePermission] = useState(false)
@@ -36,6 +37,46 @@ export default function App() {
   }
   if(hasMediaPermission === false){
     return <Text>Não há acesso as bibliotecas</Text>
+  }
+
+  const recordVideo = () =>{
+    setIsRecording(true)
+    const options : CameraRecordingOptions = {
+      maxDuration: 60
+    }
+
+    if(cameraRef && cameraRef.current){
+      cameraRef.current.recordAsync(options).then((recordedVideo: any) =>{
+          setVideo(recordedVideo)
+          setIsRecording(false)
+      })
+    }
+    
+  }
+
+  const stopRecording = () => {
+      setIsRecording(false)
+      if(cameraRef && cameraRef.current){
+        cameraRef.current.stopRecording()
+      }
+  }
+
+  if(video){
+    const shareVideo = () => {
+
+    }
+    const saveVideo = () => {
+      
+    }
+
+      return (
+        <VideoPlayer
+          video={video}
+          onShare={shareVideo}
+          onSave={saveVideo}
+          onDiscard={()=> setVideo(undefined)}
+        />
+      )
   }
 
   return (
